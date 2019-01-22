@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>我的导航网站</title>
+    <link rel="stylesheet" href="css/a.css">
+</head>
+<body>
+    <header></header>
+    <main>
+        <div class="wrapper" id="divFirst"></div>
+    </main>
+    <footer></footer>
+    <script>
+        keys = {    //声明一个二维数组
+            '0':{0:'q',1:'w',2:'e',3:'r',4:'t',5:'y',6:'u',7:'i',8:'o',9:'p',length:10},
+            '1':{0:'a',1:'s',2:'d',3:'f',4:'g',5:'h',6:'j',7:'k',8:'l',length:9},
+            '2':{0:'z',1:'x',2:'c',3:'v',4:'b',5:'n',6:'m',length:7},
+            'length':3
+        }
+        hash = {    //声明一个hash
+            'q':'qq.com',
+            'w':'weibo.com',
+            'e':'ele.me',
+            'r':''
+        }
+
+        //取出 localStorage 中的hashEnd对应的hash
+        hashInLocalStorage = JSON.parse(localStorage.getItem('hashEnd') || 'null')
+        if(hashInLocalStorage){ //如果浏览器中的hashEnd存在
+            hash = hashInLocalStorage   //就拿hashEnd覆盖网页的原hash
+        }
+        //遍历keys,生成 kbd 标签
+        index = 0
+        while(index< keys['length']){ //0 1 2 数组循环三次
+            div1 = document.createElement('div')
+            divFirst.appendChild(div1)
+            row = keys[index] //第一个数组 第二个数组 第三个数组
+            index2 = 0
+            while(index2< row['length']){ // 0-9 0-8 0-7
+                kbd1 = document.createElement('kbd')
+                kbd1.textContent = row[index2]
+                button1 = document.createElement('button')
+                button1.textContent = '编辑'
+                button1.id = row[index2]    //给每个按钮标记以其对应的字母id
+                button1.onclick = function(fjogjosjogo){    //当用户点击时，去fjog..中取要的值
+                    key = fjogjosjogo['target']['id']    //取fjog..中的target值的id，存到key容器中
+                    urlId = prompt('给我一个网址')  //浏览器弹出一个输入框,把用户输入的值存到urlId这个容器中
+                    hash[key] = urlId   //hash变更
+                    localStorage.setItem('hashEnd',JSON.stringify(hash))    //localStorage里有很多桶，hashEnd就是桶的名字。将变更后的hash存到hashEnd这个容器里
+                }
+                kbd1.appendChild(button1)
+                div1.appendChild(kbd1)
+                index2 = index2 + 1
+            }
+            index = index + 1 
+        }
+        
+        /*
+        //测试
+        document.onkeypress = function(fjogjosjogo){
+            console.log('我发现你输入了一个量')
+            console.log('你按键的时候输入的值为')
+            console.log(fjogjosjogo['key'])
+        }
+        */
+
+        document.onkeypress = function(fjogjosjogo){
+            key = fjogjosjogo['key']    // q s d j...拿到用户按的键
+            website = hash[key]     //得到hash数组中对应按键的地址
+            //location.href = 'http://' + website 使用http协议在当前页面访问该地址
+            window.open('http://' + website, '_blank')
+        }
+    </script>
+</body>
+</html>
